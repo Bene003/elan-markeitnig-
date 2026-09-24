@@ -3,7 +3,7 @@
  * client : problème, intervention, ce qui a changé, un chiffre, un témoignage.
  *
  * `clientName` est optionnel à dessein : un cas anonymisé ("PME de services,
- * 12 employés, Montréal") reste utilisable, un cas sans chiffre ne l'est pas.
+ * 12 employés") reste utilisable, un cas sans chiffre ne l'est pas.
  * C'est le point signalé par écrit dès le cadrage.
  *
  * ATTENTION : LES TROIS CAS CI-DESSOUS SONT DES EXEMPLES DE MISE EN PAGE.
@@ -53,7 +53,7 @@ export type EtudeDeCas = {
 export const etudesDeCas: EtudeDeCas[] = [
   {
     slug: "cas-1",
-    contexte: "Entreprise de services, 14 employés, Montréal",
+    contexte: "Entreprise de services, 14 employés",
     probleme:
       "Un bon mois, puis deux mois creux, sans que personne sache expliquer ni l'un ni l'autre.",
     intervention:

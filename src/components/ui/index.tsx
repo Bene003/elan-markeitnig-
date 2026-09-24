@@ -243,6 +243,10 @@ export function SectionHeading({
  * `titreAccent` est la seconde moitié du titre, en italique et en vert clair.
  * Le découpage est une donnée passée par l'appelant, jamais une coupure de
  * chaîne : c'est une décision de rédaction.
+ *
+ * `page-hero` n'habille rien : c'est le repère que globals.css utilise pour
+ * neutraliser la révélation au défilement sur la section qui le suit
+ * immédiatement, laquelle est déjà à l'écran au chargement.
  */
 export function PageHero({
   eyebrow,
@@ -259,7 +263,7 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="sur-sombre relative isolate overflow-hidden bg-surface-invert text-ink-invert">
+    <section className="page-hero sur-sombre relative isolate overflow-hidden bg-surface-invert text-ink-invert">
       <div
         aria-hidden="true"
         className="grille-invert grille-fondue pointer-events-none absolute inset-0 -z-10"

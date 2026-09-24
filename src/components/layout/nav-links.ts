@@ -14,45 +14,38 @@ export const parcoursLinks = [
 ] as const;
 
 /**
- * La barre de navigation pointe vers les SECTIONS DE L'ACCUEIL, pas vers les
- * pages internes.
+ * LA BARRE POINTE VERS LES PAGES, ET NON VERS LES SECTIONS DE L'ACCUEIL.
  *
- * C'est le modèle d'Hephera, et il repose sur une observation simple : un
- * prospect qui arrive ne veut pas naviguer, il veut lire une histoire de bout
- * en bout. Une barre qui l'envoie sur cinq pages différentes le fait
- * recommencer cinq fois. L'accueil porte donc le récit complet, et les pages
- * internes servent à approfondir ce qui a retenu l'attention.
+ * Le modèle précédent était celui d'Hephera : un accueil qui portait le récit
+ * complet, et une barre d'ancres qui y déplaçait le lecteur. Il tenait tant
+ * que l'accueil restait le seul endroit où le contenu existait vraiment. Ce
+ * n'est plus le cas : les cinq pages internes sont écrites, et l'accueil
+ * redisait ce qu'elles disent déjà, en plus court. Un visiteur qui cliquait
+ * « Méthode » dans la barre puis « Voir la méthode en détail » au bas de la
+ * section lisait la méthode deux fois.
  *
- * Les huit pages contractuelles existent toujours et restent atteignables :
- * chaque section de l'accueil se termine par un lien vers sa page, et le pied
- * de page les liste toutes. C'est ce qui tient à la fois l'art. 4 et le
- * critère « aucun lien mort » de l'art. 20.
+ * L'accueil redevient donc ce qu'il est : une entrée. Il pose le problème,
+ * aiguille entre les deux clientèles, et laisse chaque page porter son sujet.
+ * Chaque lien de la barre mène à une page, jamais à une ancre.
+ *
+ * L'ORDRE EST CELUI DE LA DÉCISION, pas celui du site : on veut savoir ce
+ * qu'une agence fait, comment elle s'y prend, ce que ça a donné, à qui on
+ * parle, et enfin comment la joindre.
+ *
+ * `telephone: false` retire le lien du second rang de l'en-tête sous 1024px.
+ * Trois libellés y tiennent, pas cinq : au-delà, ils se serrent sous la cible
+ * tactile de 44px sur un écran de 360px de large, et le rang doit encore
+ * accueillir le sélecteur de parcours. « Contact » saute parce que le bouton
+ * de rendez-vous occupe déjà cette place, en plus visible, et « À propos »
+ * parce que c'est la page qu'on consulte en dernier. Les deux restent
+ * atteignables depuis le pied de page.
  */
-/**
- * L'ORDRE SUIT LA PAGE, et non l'habitude.
- *
- * L'accueil raconte le constat, puis la méthode, puis il bifurque entre les
- * deux clientèles, et c'est cette bifurcation qui porte les huit services. La
- * méthode passe donc avant les services dans la barre. Une barre d'ancres qui
- * ne suit pas l'ordre de la page fait remonter le visiteur en arrière sans
- * qu'il comprenne pourquoi, et c'est le seul défaut vraiment coûteux de ce
- * modèle de navigation.
- */
-export const ancreLinks = [
-  { href: "/#methode", label: "Méthode" },
-  { href: "/#services", label: "Services" },
-  { href: "/#resultats", label: "Résultats" },
-  { href: "/#a-propos", label: "À propos" },
-  { href: "/#contact", label: "Contact" },
-] as const;
-
-/** Les pages internes, pour le pied de page et la page 404. */
 export const pageLinks = [
-  { href: "/services", label: "Services" },
-  { href: "/methode", label: "Méthode" },
-  { href: "/resultats", label: "Résultats" },
-  { href: "/a-propos", label: "À propos" },
-  { href: "/contact", label: "Contact" },
+  { href: "/services", label: "Services", telephone: true },
+  { href: "/methode", label: "Méthode", telephone: true },
+  { href: "/resultats", label: "Résultats", telephone: true },
+  { href: "/a-propos", label: "À propos", telephone: false },
+  { href: "/contact", label: "Contact", telephone: false },
 ] as const;
 
 /** Les huit pages contractuelles, pour le pied de page et la page 404. */

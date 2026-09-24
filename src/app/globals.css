@@ -430,13 +430,22 @@
    composition, jamais un recalcul de mise en page.
 
    `--rang` est posé en style inline sur chaque `<li>`, sans unité, ce qui
-   permet `calc(var(--rang) * 13%)`. C'est la seule façon d'échelonner cinq
-   plages d'animation sans écrire cinq règles. Le pas de 13 % est celui de la
-   course de la pointe divisée par cinq : c'est ce qui fait que chaque étape
-   arrive au moment précis où la pointe passe devant elle, et non à un rythme
-   qui lui serait parallèle.
+   permet `calc(var(--rang) * var(--pas))`. C'est la seule façon d'échelonner
+   les plages d'animation sans écrire une règle par étape. Le pas est la
+   course de la pointe (65 %, de `cover 10%` à `cover 75%`) divisée par le
+   nombre d'étapes : c'est ce qui fait que chaque étape arrive au moment
+   précis où la pointe passe devant elle, et non à un rythme qui lui serait
+   parallèle.
+
+   CE NOMBRE EST UNE DONNÉE, PAS UNE CONSTANTE. Il valait 13 % écrit en dur
+   tant que la méthode comptait cinq étapes ; l'ajout de l'immersion l'a fait
+   passer à six, et le même 13 % allumait le dernier jalon après que la
+   pointe l'avait dépassé. `--etapes` est donc posé en style inline par la
+   page, depuis la longueur du tableau, et le pas s'en déduit ici.
    --------------------------------------------------------------------------- */
 .methode {
+  --etapes: 5;
+  --pas: calc(65% / var(--etapes));
   view-timeline-name: --methode;
   view-timeline-axis: block;
 }
@@ -508,14 +517,14 @@
     .methode-jalon {
       animation: methode-jalon linear both;
       animation-timeline: --methode;
-      animation-range: cover calc(10% + var(--rang) * 13%) cover
-        calc(18% + var(--rang) * 13%);
+      animation-range: cover calc(10% + var(--rang) * var(--pas)) cover
+        calc(18% + var(--rang) * var(--pas));
     }
     .methode-texte {
       animation: methode-texte linear both;
       animation-timeline: --methode;
-      animation-range: cover calc(13% + var(--rang) * 13%) cover
-        calc(25% + var(--rang) * 13%);
+      animation-range: cover calc(13% + var(--rang) * var(--pas)) cover
+        calc(25% + var(--rang) * var(--pas));
     }
   }
 }
@@ -1372,23 +1381,44 @@
   }
 }
 
+/* LA RÉVÉLATION N'EST PLUS RÉSERVÉE À L'ACCUEIL.
+   Elle l'était tant que l'accueil portait le récit complet : c'était la seule
+   page assez longue pour qu'on y défile. Depuis que l'impact vit sur
+   /services, l'ancrage et l'équipe sur /a-propos, et ainsi de suite, ce sont
+   les pages internes qu'on parcourt, et elles héritaient d'un défilement mort
+   pendant que l'accueil gardait tout le mouvement. Le sélecteur perd donc son
+   préfixe `.elan-accueil` : chaque section, où qu'elle soit, arrive comme elle
+   arrivait sur l'accueil.
+
+   Coût : zéro octet. `Section` posait déjà `.scroll-reveal-contenu` sur toutes
+   les pages, et la chronologie reste celle du moteur de rendu.
+
+   `.page-hero + section` est la seule exception, et elle est nécessaire : sur
+   une page interne, la première section commence à peine sous la ligne de
+   flottaison. Une chronologie de vue calcule sa progression dès le chargement,
+   donc ce bloc s'afficherait à moitié fondu, sans que personne ait défilé. Un
+   visiteur lirait ça comme un rendu inachevé, pas comme une animation. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .reveal-apres-hero-entete,
     .reveal-apres-hero-liste > li,
-    .elan-accueil .scroll-reveal-contenu > * {
+    .scroll-reveal-contenu > * {
       animation: texte-apres-hero linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 40%;
       will-change: opacity, transform;
+    }
+
+    .page-hero + section .scroll-reveal-contenu > * {
+      animation: none;
+      will-change: auto;
     }
   }
 }
 
 /* La couverture ne s'utilise qu'après le hero ou une respiration vidéo. Entre
    deux sections opaques, la page conserve sa lecture normale. */
-.interlude-video + section,
-.interlude-video + .resultats-emboites {
+.interlude-video + section {
   position: relative;
   z-index: 10;
   margin-top: -3.5rem;
@@ -1399,39 +1429,18 @@
   transform-origin: center top;
 }
 
-/* Après les résultats, « À propos » repart sur sa propre surface : ce n'est
-   pas une nouvelle couverture animée, mais le même relief pour ne pas laisser
-   deux sections opaques se coller l'une à l'autre. */
-.section-emboitee-simple {
-  position: relative;
-  z-index: 10;
-  margin-top: -3.5rem;
-  overflow: clip;
-  border-top: 1px solid color-mix(in srgb, var(--color-brand) 12%, transparent);
-  border-radius: 1.75rem 1.75rem 0 0;
-  box-shadow: 0 -1.4rem 3.4rem color-mix(in srgb, var(--color-surface-invert) 12%, transparent);
-}
-
 @media (min-width: 64rem) {
-  .interlude-video + section,
-  .interlude-video + .resultats-emboites {
+  .interlude-video + section {
     margin-top: -5.5rem;
     border-radius: 2.5rem 2.5rem 0 0;
   }
-
-  .section-emboitee-simple {
-    margin-top: -5.5rem;
-    border-radius: 2.5rem 2.5rem 0 0;
-  }
-
 }
 
 /* La lèvre est le bord d'un couvercle : elle reste visible avant que le
    contenu ne soit complètement ouvert et ancre la perspective dans une vraie
    profondeur, au lieu d'un simple mouvement vertical. */
 .premier-emboitement::before,
-.interlude-video + section::before,
-.interlude-video + .resultats-emboites::before {
+.interlude-video + section::before {
   position: absolute;
   z-index: 10;
   top: 0;
@@ -1465,16 +1474,14 @@
       animation-range: entry 0% cover 24%;
     }
 
-    .interlude-video + section,
-    .interlude-video + .resultats-emboites {
+    .interlude-video + section {
       animation: section-couverture linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 24%;
     }
 
     .premier-emboitement::before,
-    .interlude-video + section::before,
-    .interlude-video + .resultats-emboites::before {
+    .interlude-video + section::before {
       animation: rebord-emboite linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 24%;
@@ -1884,6 +1891,230 @@
   }
 }
 
+/* Les deux scènes de l'aiguillage sont des explications, pas des ornements.
+   Elles restent délibérément lisibles à l'arrêt : l'animation ne fait
+   qu'animer le chemin que racontent les libellés. */
+.scene-entreprise-clair-grille {
+  stroke: color-mix(in srgb, var(--color-ink-invert) 7%, transparent);
+  stroke-width: 1;
+}
+
+.scene-entreprise-clair-titre,
+.scene-particulier-clair-titre {
+  fill: var(--color-accent);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.scene-entreprise-clair-source rect {
+  fill: color-mix(in srgb, var(--color-invert-raised) 88%, transparent);
+  stroke: color-mix(in srgb, var(--color-ink-invert) 28%, transparent);
+}
+
+.scene-entreprise-clair-source text {
+  fill: var(--color-ink-invert);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.65px;
+}
+
+.scene-entreprise-clair-route {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-accent) 72%, var(--color-ink-invert));
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.scene-entreprise-clair-halo {
+  opacity: 0.32;
+}
+
+.scene-entreprise-clair-systeme rect {
+  stroke: color-mix(in srgb, var(--color-ink-invert) 60%, transparent);
+}
+
+.scene-entreprise-clair-systeme path {
+  stroke: color-mix(in srgb, var(--color-surface-invert) 80%, transparent);
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.scene-entreprise-clair-systeme text {
+  fill: var(--color-ink-invert);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-anchor: middle;
+}
+
+.scene-entreprise-clair-coeur {
+  fill: var(--color-ink-invert);
+  stroke: var(--color-accent);
+  stroke-width: 7;
+}
+
+.scene-entreprise-clair-barres rect {
+  fill: color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-invert));
+}
+
+.scene-entreprise-clair-barres path:not(.scene-entreprise-clair-fleche) {
+  stroke: color-mix(in srgb, var(--color-ink-invert) 38%, transparent);
+}
+
+.scene-entreprise-clair-fleche {
+  stroke: var(--color-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.scene-particulier-clair-halo {
+  opacity: 0.25;
+}
+
+.scene-particulier-clair-route {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.scene-particulier-clair .route-secondaire {
+  stroke: color-mix(in srgb, var(--color-ink-invert) 22%, transparent);
+  stroke-dasharray: 3 9;
+  stroke-width: 1.5;
+}
+
+.scene-particulier-clair .route-principale {
+  stroke: var(--color-accent);
+  stroke-dasharray: 8 7;
+  stroke-width: 3;
+}
+
+.scene-particulier-clair-etape circle {
+  fill: color-mix(in srgb, var(--color-invert-raised) 94%, transparent);
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+}
+
+.scene-particulier-clair-etape > text:not(.scene-particulier-clair-label) {
+  fill: var(--color-ink-invert);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.scene-particulier-clair-label,
+.scene-particulier-clair-cap text {
+  fill: color-mix(in srgb, var(--color-ink-invert) 78%, transparent);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.15px;
+}
+
+.scene-particulier-clair-cap circle {
+  fill: var(--color-accent);
+  stroke: color-mix(in srgb, var(--color-ink-invert) 75%, transparent);
+  stroke-width: 2;
+}
+
+.scene-particulier-clair-cap path {
+  fill: var(--color-surface-invert);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene-entreprise-clair-source {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: scene-levier 4.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
+  .scene-entreprise-clair .source-acquisition { animation-delay: 0.32s; }
+  .scene-entreprise-clair .source-operations { animation-delay: 0.64s; }
+
+  .scene-entreprise-clair-route {
+    stroke-dasharray: 5 9;
+    animation: scene-signal-systeme 2.8s linear infinite;
+  }
+
+  .scene-entreprise-clair .route-acquisition { animation-delay: 0.26s; }
+  .scene-entreprise-clair .route-operations { animation-delay: 0.52s; }
+  .scene-entreprise-clair .route-sortie { animation-delay: 0.78s; }
+
+  .scene-entreprise-clair-systeme {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: scene-systeme-respire 2.8s ease-in-out infinite;
+  }
+
+  .scene-entreprise-clair-halo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: scene-systeme-halo 2.8s ease-in-out infinite;
+  }
+
+  .scene-entreprise-clair-barres rect {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: scene-croissance 4.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+
+  .scene-entreprise-clair .barre-deux { animation-delay: 0.16s; }
+  .scene-entreprise-clair .barre-trois { animation-delay: 0.32s; }
+
+  .scene-particulier-clair .route-principale {
+    animation: scene-route-cap 3.9s linear infinite;
+  }
+
+  .scene-particulier-clair-etape,
+  .scene-particulier-clair-cap {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: scene-etape-cap 3.9s ease-in-out infinite;
+  }
+
+  .scene-particulier-clair .etape-deux { animation-delay: 0.38s; }
+  .scene-particulier-clair .etape-trois { animation-delay: 0.76s; }
+  .scene-particulier-clair-cap { animation-delay: 1.14s; }
+}
+
+@keyframes scene-levier {
+  0%, 68%, 100% { opacity: 0.72; transform: translateX(0); }
+  16%, 32% { opacity: 1; transform: translateX(6px); }
+}
+
+@keyframes scene-signal-systeme {
+  to { stroke-dashoffset: -56; }
+}
+
+@keyframes scene-systeme-respire {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+@keyframes scene-systeme-halo {
+  0%, 100% { opacity: 0.18; transform: scale(0.86); }
+  50% { opacity: 0.48; transform: scale(1.12); }
+}
+
+@keyframes scene-croissance {
+  0%, 16%, 100% { opacity: 0.62; transform: scaleY(0.58); }
+  32%, 72% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes scene-route-cap {
+  to { stroke-dashoffset: -90; }
+}
+
+@keyframes scene-etape-cap {
+  0%, 65%, 100% { transform: scale(1); }
+  20%, 42% { transform: scale(1.12); }
+}
+
 /* LE VOILE EST LA PIÈCE QUI FAIT TENIR DU TEXTE SUR UNE IMAGE, et c'est deux
    dégradés, pas un.
 
@@ -2176,6 +2407,175 @@ body:has(.scene-cinema) > header {
   transform: scale(1.06);
 }
 
+/* ==========================================================================
+   L'EN-TÊTE CAMÉLÉON
+
+   Deux états, et un seul attribut les sépare. Au repos, la barre garde le
+   dégradé de la marque et se confond avec le hero. Détachée, elle devient une
+   carte flottante qui emprunte la couleur réellement peinte sous elle.
+
+   Les couleurs de texte descendent toutes de `currentColor` : la bascule
+   clair/sombre tient donc en une seule déclaration, au lieu d'une règle par
+   lien, par pastille et par bouton.
+
+   Les règles de ton sont volontairement conditionnées à `data-colle="true"`.
+   Le script ne met `data-ton` à jour que lorsque la barre est détachée : sans
+   cette garde, un `clair` resté du dernier défilement peindrait du texte
+   sombre sur le vert profond au retour en haut de page.
+   ========================================================================== */
+
+.entete-barre {
+  color: var(--color-ink-invert);
+  transition:
+    background-color 500ms var(--ease-elan),
+    color 500ms var(--ease-elan),
+    border-radius 500ms var(--ease-elan),
+    box-shadow 500ms var(--ease-elan);
+}
+
+/* `background-image: none` est indispensable : sans lui, le dégradé de
+   `.site-header-volume` resterait peint par-dessus la couleur empruntée.
+
+   CE QUI FAIT FONDRE LA BARRE, C'EST LA COULEUR, PAS LA TRANSPARENCE. Le
+   premier essai était à 82 % : les barres vertes de la scène `Montee`
+   passaient dessous et la salissaient d'une tache verte, ce qui est exactement
+   le contraire de l'effet cherché. À 92 %, la teinte empruntée porte tout le
+   fondu, et le flou ne garde que ce qu'il faut de matière pour que la carte ne
+   soit pas un rectangle plat. */
+.entete[data-colle="true"] .entete-barre {
+  margin-top: 0;
+  background-image: none;
+  background-color: color-mix(
+    in srgb,
+    var(--fond, var(--color-surface-invert)) 92%,
+    transparent
+  );
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  backdrop-filter: blur(18px) saturate(130%);
+  border-radius: 0 0 1.35rem 1.35rem;
+  box-shadow: 0 0.9rem 2.2rem -1.6rem
+    color-mix(in srgb, var(--color-surface-invert) 70%, transparent);
+}
+
+.entete[data-colle="true"][data-ton="clair"] .entete-barre {
+  color: var(--color-ink);
+}
+
+/* Le vert d'accent n'a pas assez de contraste sur un fond blanc : le bouton y
+   reprend le vert profond de la marque et son encre claire. */
+.entete[data-colle="true"][data-ton="clair"] .entete-cta {
+  background-color: var(--color-brand);
+  color: var(--color-on-brand);
+}
+
+.entete[data-colle="true"][data-ton="clair"] .entete-cta:hover {
+  background-color: var(--color-brand-strong);
+}
+
+/* L'anneau de focus doit rester visible dans les deux tons ; l'accent se perd
+   sur le blanc. */
+.entete[data-colle="true"][data-ton="clair"] .entete-barre :focus-visible {
+  outline-color: var(--color-brand);
+}
+
+.entete-lien {
+  color: color-mix(in srgb, currentColor 64%, transparent);
+  transition: color 300ms var(--ease-elan);
+}
+
+.entete-lien:hover {
+  color: currentColor;
+}
+
+/* Le nom se replie au défilement, et il ne reste que le sigle. La grille
+   extérieure passe de 1fr à 0fr, l'étage intérieur masque le débordement :
+   c'est la seule façon d'animer la disparition d'un texte dont on ne connaît
+   pas la largeur, sans la mesurer en JavaScript. */
+.entete-nom {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-left: 0.625rem;
+  white-space: nowrap;
+  transition:
+    grid-template-columns 550ms var(--ease-elan),
+    opacity 350ms var(--ease-elan),
+    margin-left 550ms var(--ease-elan);
+}
+
+.entete-nom > span {
+  overflow: hidden;
+}
+
+.entete[data-colle="true"] .entete-nom {
+  grid-template-columns: 0fr;
+  margin-left: 0;
+  opacity: 0;
+}
+
+/* LE SECOND RANG DE L'EN-TÊTE, SOUS 1024PX.
+   IL NE SE REPLIE PAS. Un premier essai le refermait pendant qu'on descendait,
+   pour rendre de la hauteur à la lecture : il ne restait alors que le nom et le
+   bouton, et la navigation semblait avoir disparu. C'est le contraire de ce
+   qu'on veut ici, où la barre du haut doit porter toutes les options, tout le
+   temps. La hauteur qu'on rend ne vaut pas la navigation qu'on retire. */
+@media (width < 64rem) {
+  /* Le rang porte trois libellés ET le sélecteur de parcours, que l'art. 3
+     impose de garder dans la navigation. Aux tailles de l'ordinateur, les deux
+     ne tiennent pas côte à côte sur un écran de 390px : le sélecteur se
+     resserre. Sa hauteur, elle, ne bouge pas, parce que `max-lg:min-h-11` y
+     tient la cible tactile de 44px. */
+  .entete .parcours-pastille {
+    padding-inline: 0.55rem;
+    font-size: 0.68rem;
+  }
+}
+
+/* Le petit Android de 360px. Les trois libellés et le sélecteur y demandent
+   353px pour 320 disponibles, et le rang les tronquerait. Tout se resserre
+   encore d'un cran, sans jamais toucher à la hauteur des cibles. Le retour à
+   la ligne est posé en dernier filet : sous 320px de large, le sélecteur passe
+   dessous plutôt que d'être coupé. */
+@media (width < 24.5rem) {
+  .entete .entete-lien {
+    font-size: 0.7rem;
+  }
+
+  .entete nav ul {
+    gap: 0.5rem;
+  }
+
+  .entete .parcours-pastille {
+    padding-inline: 0.4rem;
+    font-size: 0.64rem;
+  }
+}
+
+/* Le sélecteur de parcours vit dans un en-tête dont la couleur bascule. Ses
+   teintes sont donc posées en mélange de `currentColor`, et il suit le ton
+   clair comme le ton sombre sans qu'aucune classe ne lui soit passée. */
+.entete[data-colle="true"][data-ton="clair"] .parcours-groupe {
+  border-color: color-mix(in srgb, currentColor 16%, transparent);
+  background-color: color-mix(in srgb, currentColor 5%, transparent);
+}
+
+.entete[data-colle="true"][data-ton="clair"]
+  .parcours-pastille:not([aria-current]) {
+  color: var(--color-ink-muted);
+}
+
+.entete[data-colle="true"][data-ton="clair"]
+  .parcours-pastille:not([aria-current]):hover {
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entete-barre,
+  .entete-nom,
+  .entete-lien {
+    transition: none;
+  }
+}
+
 
 /* Entrée échelonnée. La courbe est la même pour tous les éléments, seuls les
    retards changent : c'est ce qui donne l'impression d'un seul mouvement
@@ -2229,6 +2629,16 @@ body:has(.scene-cinema) > header {
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  /* L'en-tête suit le lecteur : sans cette réserve, une ancre amènerait le
+     titre de section exactement sous la barre, donc invisible. Sous 1024px la
+     barre tient sur deux rangs, donc la réserve est plus haute. */
+  scroll-padding-top: 7.25rem;
+}
+
+@media (width >= 64rem) {
+  html {
+    scroll-padding-top: 4.5rem;
+  }
 }
 
 body {
@@ -2270,9 +2680,7 @@ body {
   }
 
   .premier-emboitement > section,
-  .interlude-video + section,
-  .interlude-video + .resultats-emboites,
-  .section-emboitee-simple {
+  .interlude-video + section {
     border-radius: 1.5rem 1.5rem 0 0;
   }
 }

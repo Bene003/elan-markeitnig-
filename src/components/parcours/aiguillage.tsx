@@ -145,9 +145,9 @@ function AnimationParcours({ parcours }: { parcours: Parcours }) {
         )}
       >
         {entreprise ? (
-          <SceneEntreprise />
+          <SceneEntrepriseClair />
         ) : (
-          <SceneParticulier />
+          <SceneParticulierClair />
         )}
       </div>
 
@@ -173,114 +173,46 @@ function AnimationParcours({ parcours }: { parcours: Parcours }) {
   );
 }
 
-function SceneEntreprise() {
+function SceneEntrepriseClair() {
   return (
-    <svg
-      aria-hidden="true"
-      className="scene-entreprise size-full"
-      viewBox="0 0 500 500"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg aria-hidden="true" className="scene-entreprise-clair size-full" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="entre-top" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#B6D8A9" />
-          <stop offset="1" stopColor="#6AA05C" />
+        <linearGradient id="entre-systeme-clair" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#B6D8A9" stopOpacity="0.95" />
+          <stop offset="1" stopColor="#6AA05C" stopOpacity="0.7" />
         </linearGradient>
-        <linearGradient id="entre-left" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#225B33" />
-          <stop offset="1" stopColor="#123021" />
-        </linearGradient>
-        <linearGradient id="entre-right" x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#0C1F14" />
-          <stop offset="1" stopColor="#225B33" />
-        </linearGradient>
-        <filter id="entre-glow" x="-70%" y="-70%" width="240%" height="240%">
-          <feGaussianBlur stdDeviation="10" />
-        </filter>
+        <filter id="entre-lueur-clair" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="12" /></filter>
       </defs>
-
-      <path className="scene-entreprise-grille" d="M74 372L250 455L426 372M74 324L250 407L426 324M74 276L250 359L426 276M132 214V399M191 186V426M250 158V454M309 186V426M368 214V399" />
-      <ellipse className="scene-entreprise-halo" cx="250" cy="362" rx="142" ry="38" />
-      <path className="scene-entreprise-lien lien-a" d="M160 290L250 244L340 290" />
-      <path className="scene-entreprise-lien lien-b" d="M160 350L250 303L340 350" />
-
-      <g className="scene-entreprise-module module-un">
-        <path d="M112 300L158 276L204 300L158 324L112 300Z" fill="url(#entre-top)" />
-        <path d="M112 300L158 324V385L112 361V300Z" fill="url(#entre-left)" />
-        <path d="M158 324L204 300V361L158 385V324Z" fill="url(#entre-right)" />
-      </g>
-      <g className="scene-entreprise-module module-deux">
-        <path d="M204 266L250 242L296 266L250 290L204 266Z" fill="url(#entre-top)" />
-        <path d="M204 266L250 290V373L204 349V266Z" fill="url(#entre-left)" />
-        <path d="M250 290L296 266V349L250 373V290Z" fill="url(#entre-right)" />
-      </g>
-      <g className="scene-entreprise-module module-trois">
-        <path d="M296 300L342 276L388 300L342 324L296 300Z" fill="url(#entre-top)" />
-        <path d="M296 300L342 324V385L296 361V300Z" fill="url(#entre-left)" />
-        <path d="M342 324L388 300V361L342 385V324Z" fill="url(#entre-right)" />
-      </g>
-      <g className="scene-entreprise-module module-haut">
-        <path d="M204 183L250 159L296 183L250 207L204 183Z" fill="url(#entre-top)" />
-        <path d="M204 183L250 207V266L204 242V183Z" fill="url(#entre-left)" />
-        <path d="M250 207L296 183V242L250 266V207Z" fill="url(#entre-right)" />
-      </g>
-      <circle className="scene-entreprise-coeur-flou" cx="250" cy="244" r="24" fill="#B6D8A9" filter="url(#entre-glow)" />
-      <circle className="scene-entreprise-coeur" cx="250" cy="244" r="5" fill="#EEF3EF" />
-      <g className="scene-entreprise-etiquette etiquette-a">
-        <path d="M86 188H171" />
-        <circle cx="86" cy="188" r="3" />
-        <text x="96" y="172">POSITIONNEMENT</text>
-      </g>
-      <g className="scene-entreprise-etiquette etiquette-b">
-        <path d="M330 418H414" />
-        <circle cx="414" cy="418" r="3" />
-        <text x="302" y="442">OPÉRATIONS</text>
-      </g>
+      <path className="scene-entreprise-clair-grille" d="M40 90H460M40 170H460M40 250H460M40 330H460M40 410H460M72 54V446M164 54V446M256 54V446M348 54V446M440 54V446" />
+      <text className="scene-entreprise-clair-titre" x="58" y="78">LES LEVIERS</text>
+      <text className="scene-entreprise-clair-titre" x="326" y="78">LA CROISSANCE</text>
+      <g className="scene-entreprise-clair-source source-positionnement"><rect x="56" y="118" width="110" height="46" rx="8" /><text x="72" y="146">POSITIONNEMENT</text></g>
+      <g className="scene-entreprise-clair-source source-acquisition"><rect x="56" y="218" width="110" height="46" rx="8" /><text x="72" y="246">ACQUISITION</text></g>
+      <g className="scene-entreprise-clair-source source-operations"><rect x="56" y="318" width="110" height="46" rx="8" /><text x="72" y="346">OPÉRATIONS</text></g>
+      <path className="scene-entreprise-clair-route route-positionnement" d="M166 141H204L220 196" />
+      <path className="scene-entreprise-clair-route route-acquisition" d="M166 241H220" />
+      <path className="scene-entreprise-clair-route route-operations" d="M166 341H204L220 286" />
+      <path className="scene-entreprise-clair-route route-sortie" d="M280 241H326" />
+      <circle className="scene-entreprise-clair-halo" cx="250" cy="241" r="70" fill="#B6D8A9" filter="url(#entre-lueur-clair)" />
+      <g className="scene-entreprise-clair-systeme"><rect x="220" y="191" width="60" height="100" rx="12" fill="url(#entre-systeme-clair)" /><path d="M236 222H264M236 241H264M236 260H254" /><text x="250" y="309">SYSTÈME</text></g>
+      <circle className="scene-entreprise-clair-coeur" cx="250" cy="241" r="6" />
+      <g className="scene-entreprise-clair-barres"><rect className="barre-un" x="336" y="318" width="23" height="68" rx="3" /><rect className="barre-deux" x="372" y="275" width="23" height="111" rx="3" /><rect className="barre-trois" x="408" y="220" width="23" height="166" rx="3" /><path d="M326 386H442" /><path className="scene-entreprise-clair-fleche" d="M335 306L380 262L419 207M405 207H419V221" /></g>
     </svg>
   );
 }
 
-function SceneParticulier() {
+function SceneParticulierClair() {
   return (
-    <svg
-      aria-hidden="true"
-      className="scene-particulier size-full"
-      viewBox="0 0 500 500"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <radialGradient id="particuliers-lueur">
-          <stop stopColor="#B6D8A9" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#6AA05C" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <circle className="scene-particulier-halo" cx="250" cy="250" r="175" fill="url(#particuliers-lueur)" />
-      <circle className="scene-particulier-anneau anneau-un" cx="250" cy="250" r="161" />
-      <circle className="scene-particulier-anneau anneau-deux" cx="250" cy="250" r="112" />
-      <circle className="scene-particulier-anneau anneau-trois" cx="250" cy="250" r="63" />
-      <path className="scene-particulier-route route-secondaire" d="M81 348C154 332 151 237 228 232C307 226 305 150 416 126" />
-      <path className="scene-particulier-route route-principale" d="M85 365C172 364 161 298 238 287C306 277 315 219 407 137" />
-      <g className="scene-particulier-carte carte-a">
-        <rect x="69" y="112" width="104" height="54" rx="2" />
-        <path d="M88 132H152M88 145H128" />
-      </g>
-      <g className="scene-particulier-carte carte-b">
-        <rect x="327" y="334" width="104" height="54" rx="2" />
-        <path d="M346 354H410M346 367H386" />
-      </g>
-      <g className="scene-particulier-boussole">
-        <path d="M250 172L272 250L250 328L228 250L250 172Z" />
-        <path d="M250 201L259 250L250 299L241 250L250 201Z" fill="#B6D8A9" />
-      </g>
-      <circle className="scene-particulier-point" cx="238" cy="287" r="7" />
-      <circle className="scene-particulier-arrivee" cx="407" cy="137" r="7" />
-      <g className="scene-particulier-etiquette">
-        <path d="M341 98H416" />
-        <circle cx="416" cy="98" r="3" />
-        <text x="309" y="82">VOTRE CAP</text>
-      </g>
+    <svg aria-hidden="true" className="scene-particulier-clair size-full" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="particuliers-lueur-clair" cx="50%" cy="50%"><stop stopColor="#B6D8A9" stopOpacity="0.5" /><stop offset="1" stopColor="#6AA05C" stopOpacity="0" /></radialGradient></defs>
+      <circle className="scene-particulier-clair-halo" cx="252" cy="250" r="186" fill="url(#particuliers-lueur-clair)" />
+      <path className="scene-particulier-clair-route route-secondaire" d="M65 352C120 352 120 228 208 228C298 228 310 126 441 126" />
+      <path className="scene-particulier-clair-route route-principale" d="M65 352C120 352 120 278 188 278C252 278 266 200 334 200C372 200 393 151 441 126" />
+      <text className="scene-particulier-clair-titre" x="60" y="84">UN CAP, TROIS DÉCISIONS</text>
+      <g className="scene-particulier-clair-etape etape-un"><circle cx="116" cy="325" r="24" /><text x="116" y="330">01</text><text className="scene-particulier-clair-label" x="70" y="380">CLARIFIER</text></g>
+      <g className="scene-particulier-clair-etape etape-deux"><circle cx="250" cy="238" r="24" /><text x="250" y="243">02</text><text className="scene-particulier-clair-label" x="196" y="292">POSITIONNER</text></g>
+      <g className="scene-particulier-clair-etape etape-trois"><circle cx="370" cy="172" r="24" /><text x="370" y="177">03</text><text className="scene-particulier-clair-label" x="336" y="226">AGIR</text></g>
+      <g className="scene-particulier-clair-cap"><circle cx="441" cy="126" r="27" /><path d="M441 107L452 126L441 145L430 126L441 107Z" /><text x="390" y="92">VOTRE CAP</text></g>
     </svg>
   );
 }

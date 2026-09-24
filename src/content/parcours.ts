@@ -65,7 +65,7 @@ const entreprise: ContenuParcours = {
   nav: "Entreprises",
   titreMeta: "Accompagnement des entreprises",
   descriptionMeta:
-    "Structuration opérationnelle, positionnement et croissance pour les PME de Montréal. Réservez un diagnostic de 20 minutes.",
+    "Structuration opérationnelle, positionnement et croissance pour les PME. Réservez un diagnostic de 20 minutes.",
   eyebrow: "Pour les entreprises",
   titre: "Vos ventes ne devraient pas dépendre",
   titreAccent: "du mois",
@@ -124,20 +124,28 @@ const entreprise: ContenuParcours = {
       livrable:
         "Vingt minutes pour comprendre où votre croissance bloque, et vous dire franchement si nous sommes les bons.",
     },
+    /* L'immersion n'existe que sur ce parcours : un particulier n'a pas
+       d'équipe à observer. Voir content/methode.ts. */
     {
       numero: "02",
+      titre: "Immersion dans l'entreprise",
+      livrable:
+        "Nous venons voir votre quotidien sur place. Le diagnostic repose sur ce que nous avons observé, pas seulement sur ce qu'on nous a décrit.",
+    },
+    {
+      numero: "03",
       titre: "Positionnement et priorités",
       livrable:
         "Une offre clarifiée, une clientèle cible nommée, et les trois chantiers qui comptent avant tous les autres.",
     },
     {
-      numero: "03",
+      numero: "04",
       titre: "Mise en place",
       livrable:
         "Le processus de vente, les outils et les rôles installés dans votre quotidien, pas dans un document.",
     },
     {
-      numero: "04",
+      numero: "05",
       titre: "Suivi et croissance",
       livrable:
         "Des points réguliers, des indicateurs revus, et des ajustements au fur et à mesure des résultats.",
@@ -147,9 +155,9 @@ const entreprise: ContenuParcours = {
   pourquoiTitre: "Pourquoi Elan Marketing",
   pourquoi: [
     {
-      titre: "Ancrés à Montréal",
+      titre: "Un interlocuteur proche",
       texte:
-        "Nous connaissons le marché québécois, ses cycles et ses réseaux. Les rencontres peuvent se faire en personne.",
+        "Nous connaissons votre marché, ses cycles et ses réseaux. Les échanges se font en visioconférence, ou en personne quand la distance le permet.",
     },
     {
       titre: "De l'exécution, pas des recommandations",
@@ -182,7 +190,12 @@ const entreprise: ContenuParcours = {
     {
       question: "Le diagnostic est-il vraiment sans engagement ?",
       reponse:
-        "Oui. Vingt minutes, en visioconférence ou en personne à Montréal. Vous repartez avec une lecture de votre situation, que nous travaillions ensemble ou non.",
+        "Oui. Vingt minutes, en visioconférence ou en personne quand c'est possible. Vous repartez avec une lecture de votre situation, que nous travaillions ensemble ou non.",
+    },
+    {
+      question: "Pourquoi venir dans nos locaux ?",
+      reponse:
+        "Parce que ce qui bloque une entreprise se voit rarement de l'extérieur. Le questionnaire et l'appel disent ce que vous vivez ; une présence sur place montre ce que plus personne ne remarque, parce qu'on est dedans tous les jours. C'est la première étape de l'accompagnement, une fois que nous avons décidé de travailler ensemble.",
     },
   ],
 
@@ -289,7 +302,7 @@ const particulier: ContenuParcours = {
       texte: "Vous repartez avec quelque chose d'utilisable, pas avec un devoir.",
     },
     {
-      titre: "À Montréal, en personne si vous préférez",
+      titre: "En personne si vous préférez",
       texte:
         "Visioconférence ou rencontre, selon ce qui vous met le plus à l'aise.",
     },

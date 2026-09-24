@@ -64,7 +64,7 @@ export function ParcoursSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex rounded-xs border border-invert-line bg-invert-raised p-1",
+        "parcours-groupe inline-flex rounded-xs border border-invert-line bg-invert-raised p-1",
         className,
       )}
     >
@@ -74,7 +74,11 @@ export function ParcoursSwitcher({ className }: { className?: string }) {
           href={parcoursHref[parcours]}
           aria-current={actif === parcours ? "page" : undefined}
           className={cn(
-            "rounded-xs px-3.5 py-1.5 text-xs font-semibold transition-colors duration-300",
+            /* Sous 1024px, ces deux pastilles vivent sur le second rang de
+               l'en-tête : elles deviennent des cibles tactiles et doivent donc
+               faire les 44px réglementaires. Au-dessus, elles sont visées à la
+               souris et gardent leur hauteur de pastille. */
+            "parcours-pastille flex items-center rounded-xs px-3.5 py-1.5 text-xs font-semibold transition-colors duration-300 max-lg:min-h-11",
             actif === parcours
               ? "bg-accent text-surface-invert"
               : "text-ink-invert-muted hover:text-ink-invert",

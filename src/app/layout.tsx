@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { EnteteCameleon } from "@/components/layout/entete-cameleon";
 import { baseUrl, entreprise, siteName } from "@/content/entreprise";
 
 /**
@@ -39,11 +40,11 @@ const display = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: `${siteName}, agence commerciale et de croissance à Montréal`,
+    default: `${siteName}, agence commerciale et de croissance`,
     template: `%s | ${siteName}`,
   },
   description:
-    "Elan Marketing structure la croissance des PME et des porteurs de projet à Montréal. Réservez un diagnostic de 20 minutes.",
+    "Elan Marketing structure la croissance des PME et des porteurs de projet. Réservez un diagnostic de 20 minutes.",
   openGraph: {
     type: "website",
     locale: "fr_CA",
@@ -82,6 +83,11 @@ export default function RootLayout({
           {children}
         </main>
         <SiteFooter />
+        {/* Ne rend rien : il pose `data-colle`, `data-ton`, `data-discret` et
+            `--fond` sur l'en-tête, que le CSS traduit en couleurs et en
+            hauteurs. L'en-tête reste un composant serveur et n'est jamais
+            re-rendu au défilement. */}
+        <EnteteCameleon />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -9,7 +9,7 @@ import { entreprise } from "@/content/entreprise";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Réservez un diagnostic de 20 minutes avec Elan Marketing, ou écrivez-nous. Montréal.",
+    "Réservez un diagnostic de 20 minutes avec Elan Marketing, ou écrivez-nous.",
   alternates: { canonical: "/contact" },
 };
 

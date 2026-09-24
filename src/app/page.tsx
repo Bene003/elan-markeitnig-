@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import {
   ButtonLink,
   Container,
@@ -12,23 +9,12 @@ import {
   SectionHeading,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import {
-  CaseStudies,
-  Faq,
-  FinalCta,
-  GoogleReviews,
-} from "@/components/funnel";
+import { FinalCta } from "@/components/funnel";
 import { Bandeau } from "@/components/scenes/bandeau";
 import { FondCinema } from "@/components/scenes/fond-cinema";
 import { Montee } from "@/components/scenes/montee";
-import { Ecart } from "@/components/scenes/ecart";
-import { Ancrage } from "@/components/scenes/ancrage";
 import { Aiguillage } from "@/components/parcours/aiguillage";
-import { constats, couts } from "@/content/constat";
-import { etapesMethode } from "@/content/methode";
-import { etudesDeCas } from "@/content/cas";
-import { faqCommune } from "@/content/faq";
-import { entreprise } from "@/content/entreprise";
+import { constats } from "@/content/constat";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -67,8 +53,28 @@ function InterludeVideo({
 }
 
 /**
- * L'accueil est COURT : c'est un aiguillage, pas un tunnel. Le tunnel complet
- * est sur /entreprises et /particuliers.
+ * L'ACCUEIL EST UNE ENTRÉE, PAS UN SOMMAIRE DU SITE.
+ *
+ * Il a longtemps porté le récit complet, et la barre de navigation s'y
+ * déplaçait par ancres. Ce modèle se tenait tant que l'accueil était le seul
+ * endroit où le contenu existait vraiment. Il ne l'est plus : les cinq pages
+ * internes sont écrites, et l'accueil redisait ce qu'elles disent déjà, en
+ * plus court. Un visiteur qui cliquait « Méthode » puis « Voir la méthode en
+ * détail » lisait la même chose deux fois, la seconde en mieux.
+ *
+ * Il ne reste donc que ce qu'aucune autre page ne peut porter :
+ *
+ *   1. LE HERO et les deux boutons de l'art. 3 ;
+ *   2. LE CONSTAT, vrai des deux clientèles, qui est la seule chose qu'on
+ *      puisse dire avant de savoir à qui l'on parle ;
+ *   3. L'AIGUILLAGE, qui est le seul endroit du site où le visiteur se range
+ *      d'un côté ou de l'autre, et d'où partent les deux parcours ;
+ *   4. L'APPEL FINAL.
+ *
+ * Ce qui a été retiré n'a pas été supprimé, il a rejoint sa page : l'impact et
+ * ses quatre coûts ouvrent /services, les coordonnées et le bloc équipe
+ * sont sur /a-propos, la méthode, les résultats et la FAQ étaient déjà en
+ * entier sur /methode, /resultats et /contact.
  *
  * Contraintes qui pèsent sur cette page en particulier :
  *  - c'est la seule page soumise au seuil de performance de l'art. 20 ;
@@ -117,7 +123,11 @@ export default function Accueil() {
           précisément les pixels que l'article réserve. Ce n'est pas un réglage
           esthétique, c'est un budget de mise en page.
           ------------------------------------------------------------------ */}
-      <section className="sur-sombre scene-cinema relative isolate flex flex-col overflow-hidden bg-transparent text-ink-invert lg:min-h-[calc(100svh-4rem)]">
+      {/* `lg:pb-[8.9rem]` = les 5,5rem dont la section suivante remonte, plus
+          l'espace qui séparait déjà la bande du bas de l'écran. C'est la
+          réserve dans laquelle l'emboîtement vient mordre, et c'est ce qui
+          garde la bande entièrement visible. */}
+      <section className="sur-sombre scene-cinema relative isolate flex flex-col overflow-hidden bg-transparent text-ink-invert lg:min-h-[calc(100svh-4rem)] lg:pb-[8.9rem]">
         {/* La vidéo reste la matière principale du hero, mais elle est montée
             comme un volume à droite plutôt que diluée derrière tout le texte.
             Les plans transparents et le reflet créent le relief sans ajouter
@@ -178,7 +188,7 @@ export default function Accueil() {
               <span className="font-display tabular-nums">01</span>
               <span className="h-px w-8 bg-accent/50" />
               <span className="text-ink-invert-muted">
-                Agence de croissance, Montréal
+                Agence commerciale et de croissance
               </span>
             </p>
 
@@ -235,7 +245,19 @@ export default function Accueil() {
           </div>
         </Container>
 
-        <div className="cinema-bande relative z-10 mt-8 lg:absolute lg:right-0 lg:bottom-[max(3.4rem,6vh)] lg:left-0 lg:mt-0">
+        {/* LA BANDE EST DANS LE FLUX DU HERO, PAS POSÉE DESSUS.
+
+            Elle était en `absolute` calée sur le bas de la section. Le hero
+            faisait donc sa hauteur sans elle, et la section suivante, qui
+            remonte de 5,5rem pour s'emboîter dans ce bas, passait devant :
+            mesuré à 1440x900, elle en recouvrait les 34 derniers pixels, et
+            l'emboîtement la mangeait un peu plus à chaque pixel défilé.
+
+            Remise dans le flux, elle fait partie de la hauteur du hero et rien
+            ne peut plus la recouvrir. `mt-auto` la colle au bas de la colonne
+            flex, donc la composition ne bouge pas ; la réserve sous elle est
+            le `pb` de la section, dimensionné pour absorber l'emboîtement. */}
+        <div className="cinema-bande relative z-10 mt-8 lg:mt-auto">
           <Bandeau variant="hero" />
         </div>
       </section>
@@ -306,317 +328,23 @@ export default function Accueil() {
       />
 
       {/* ------------------------------------------------------------------
-          ACTE 1 BIS, L'IMPACT. Le constat dit ce que le visiteur observe ;
-          cette section dit ce que ça lui coûte. Un symptôme se reconnaît, un
-          coût se ressent, et c'est le coût qui fait réserver un rendez-vous.
-
-          La composition est volontairement l'INVERSE de celle du constat :
-          là-haut, texte à gauche et figure à droite ; ici, figure en pleine
-          largeur et quatre mots dessous. Deux sections de suite dans la même
-          grille, et l'œil arrête de les distinguer.
-
-          Aucun chiffre dans ce bloc. Nous n'avons pas les données d'Élan, et
-          un pourcentage inventé se retourne contre nous au premier rendez-vous
-          d'un prospect. La figure dit l'ampleur par sa forme, et sa légende
-          écrit noir sur blanc que ce n'est pas une promesse.
-          ------------------------------------------------------------------ */}
-      <Section id="impact" tone="creuse">
-        <SectionHeading
-          eyebrow="L'impact"
-          title={
-            <>
-              Le problème n&apos;est pas un mois raté.{" "}
-              <em className="text-brand italic">C&apos;est l&apos;année</em>
-            </>
-          }
-          subtitle="Un écart de quelques points par mois ne se voit pas. Au bout de douze, il est devenu la distance entre deux entreprises."
-        />
-
-        <Ecart className="mt-16" />
-
-        {/* Un mot en grand, une ligne dessous. Personne ne lit un paragraphe
-            à cet endroit : le mot se retient, la phrase se survole. */}
-        <ul className="grille-filets mt-16 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {couts.map((cout) => (
-            <li
-              key={cout.cle}
-              className="group bg-surface-raised p-8 transition-colors duration-500 hover:bg-surface"
-            >
-              <p className="font-display text-[clamp(1.6rem,2.4vw,2.05rem)] leading-[1.05] font-extrabold tracking-[-0.035em] text-ink">
-                {cout.mot}
-              </p>
-              <span
-                aria-hidden="true"
-                className="mt-5 block h-px w-8 bg-brand/40 transition-all duration-500 group-hover:w-16 group-hover:bg-brand"
-              />
-              <p className="mt-5 text-[0.9rem] leading-[1.7] text-ink-muted">
-                {cout.texte}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <InterludeVideo
-        eyebrow="Un cap commun"
-        titre="La croissance ne repose plus sur une intuition du moment."
-        texte="Chaque décision est reliée à un objectif clair, mesurable et partagé par les personnes qui la portent."
-      />
-
-      {/* ------------------------------------------------------------------
-          MÉTHODE. Les étapes sont numérotées en très grand et en très pâle :
-          le numéro devient une texture de fond plutôt qu'une information, ce
-          qui donne l'échelle sans ajouter de bruit.
-          ------------------------------------------------------------------ */}
-      <Section id="methode" grille>
-        <SectionHeading
-          eyebrow="Méthode"
-          title="Comment on avance"
-          subtitle="Cinq étapes, et surtout ce qui se passe après le premier rendez-vous."
-        />
-
-        {/* LA SECTION EST SA PROPRE SCÈNE : UNE FLÈCHE QUI DESCEND.
-
-            La méthode est une progression dans le temps, et le défilement est
-            déjà une progression dans le temps. Les faire coïncider est le
-            geste le plus court : la flèche avance exactement au rythme où le
-            visiteur descend, et chaque étape se découvre au moment où la
-            pointe l'atteint. Il ne lit pas cinq étapes, il les parcourt.
-
-            La flèche est en trois pièces : un rail pâle qui montre le chemin
-            restant, une tige verte qui grandit, et une pointe qui la suit vers
-            le bas. La pointe est le seul élément mobile, tout le reste est un
-            `scaleY` sur le fil de composition.
-
-            Mécanisme habituel : chronologie `view()` nommée sur le parent
-            `.methode`, plages échelonnées par `--rang`, état au repos déjà
-            final. Voir globals.css. */}
-        <ol className="methode relative mt-16 pl-12 sm:pl-16">
-          {/* LA PISTE. Elle donne sa hauteur à tout le reste, et c'est ce qui
-              permet de faire descendre la pointe sans connaître cette hauteur :
-              le calque de la pointe fait exactement la taille de la piste, donc
-              `translateY(-100%)` le remonte d'une piste entière, pile. Une
-              distance en pourcentage plutôt qu'en pixels, donc juste quel que
-              soit le nombre d'étapes et la longueur des textes. */}
-          <span
-            aria-hidden="true"
-            className="absolute top-2 bottom-0 left-[7px] w-0.5 sm:left-[10px]"
-          >
-            <span className="absolute inset-0 bg-line-strong" />
-            <span className="methode-tige absolute inset-0 origin-top bg-brand" />
-            {/* La pointe donne le sens de lecture : sans elle, le trait
-                pourrait aussi bien monter. */}
-            <span className="methode-pointe absolute inset-0">
-              <span className="absolute bottom-0 left-1/2 size-0 -translate-x-1/2 translate-y-1/2 border-x-[6px] border-t-[9px] border-x-transparent border-t-brand" />
-            </span>
-          </span>
-
-          {etapesMethode.map((etape, i) => (
-            <li
-              key={etape.numero}
-              className="group relative pb-12"
-              style={{ "--rang": i } as React.CSSProperties}
-            >
-              {/* Le jalon est en dehors du flux du texte, sur le rail. */}
-              <span
-                aria-hidden="true"
-                className="methode-jalon absolute top-1 -left-12 size-4 rounded-full border-2 border-brand bg-surface transition-colors duration-500 group-hover:bg-brand sm:-left-16 sm:size-[1.375rem]"
-              />
-              <div className="methode-texte flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
-                <span
-                  aria-hidden="true"
-                  className="font-display text-[1.6rem] leading-none font-extrabold tracking-[-0.05em] text-brand/25 transition-colors duration-500 group-hover:text-brand/50 sm:text-[2.4rem]"
-                >
-                  {etape.numero}
-                </span>
-                <div>
-                  <h3 className="font-display text-[1.15rem] leading-snug font-bold text-ink sm:text-[1.45rem]">
-                    <span className="sr-only">Étape {etape.numero} : </span>
-                    {etape.titre}
-                  </h3>
-                  <p className="mt-2 max-w-xl text-[0.9rem] leading-[1.75] text-ink-muted">
-                    {etape.livrable}
-                  </p>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <Link
-          href="/methode"
-          className="group mt-12 inline-flex items-center gap-2 text-sm font-semibold text-brand"
-        >
-          Voir la méthode en détail
-          <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
-      </Section>
-
-      <InterludeVideo
-        eyebrow="Une croissance construite"
-        titre="Chaque action trouve sa place dans un système qui avance."
-        texte="Positionnement, acquisition et opérations cessent de se répondre au hasard : ils travaillent dans la même direction."
-        align="right"
-      />
-
-      {/* ------------------------------------------------------------------
           ACTE 2, L'AIGUILLAGE. C'est le pivot de la page, et il est sur bande
           sombre pour ça : la même couleur que le hero et que l'appel final,
           donc les trois moments qui comptent se répondent.
 
-          Le visiteur choisit, et le tunnel se joue dans son parcours sans
+          C'est aussi le seul endroit du site où le visiteur se range d'un côté
+          ou de l'autre, et c'est pour ça qu'il reste sur l'accueil quand tout
+          le reste est parti sur sa page : il n'appartient à aucune des cinq.
+
+          Le visiteur choisit, et le panneau se joue dans son parcours sans
           quitter la page. Zéro JavaScript : voir aiguillage.tsx.
           ------------------------------------------------------------------ */}
       <Aiguillage />
 
-      <InterludeVideo
-        eyebrow="Le bon parcours"
-        titre="Une direction adaptée à votre réalité, pas une recette toute faite."
-        texte="Entreprise établie ou projet en construction : le point de départ change, l'exigence reste la même."
+      <FinalCta
+        titre="Vingt minutes pour savoir où ça bloque"
+        texte="Réservez un diagnostic. Nous regardons votre situation et nous vous disons ce qui aurait le plus d'effet dans les trois prochains mois."
       />
-
-      {/* ------------------------------------------------------------------
-          RÉSULTATS. Les études de cas et les avis Google viennent du tunnel :
-          ce sont exactement les mêmes composants que sur /entreprises et
-          /particuliers, alimentés par les mêmes fichiers de contenu. Quand
-          Yliès livre ses trois cas, ils apparaissent aux quatre endroits d'un
-          coup.
-          ------------------------------------------------------------------ */}
-      <div id="resultats" className="resultats-emboites bg-surface-raised">
-        <CaseStudies cas={etudesDeCas} />
-        <GoogleReviews />
-        <Container>
-          <Link
-            href="/resultats"
-            className="group inline-flex items-center gap-2 pb-20 text-sm font-semibold text-brand sm:pb-24"
-          >
-            Voir tous les résultats
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </Container>
-      </div>
-
-      <section
-        aria-hidden="true"
-        className="interlude-video-silence relative min-h-[40svh] sm:min-h-[52svh]"
-      />
-
-      {/* ------------------------------------------------------------------
-          À PROPOS, en version courte. La page /a-propos garde l'histoire,
-          l'équipe et les valeurs : ici on ne garde que ce qui pèse dans une
-          décision d'achat, à savoir qu'il y a une personne nommée, joignable,
-          à une adresse réelle. C'est le procédé de réassurance de la
-          référence, et il ne coûte rien.
-          ------------------------------------------------------------------ */}
-      <Section id="a-propos" tone="creuse" className="section-emboitee-simple">
-        {/* Colonnes inégales et coordonnées alignées en bas. À colonnes
-            égales, le titre se cassait sur six lignes pendant que les quatre
-            coordonnées flottaient en haut d'un vide : deux blocs côte à côte
-            qui ne se regardaient pas. */}
-        <div className="grid gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-20">
-          <div>
-            <SectionHeading
-              eyebrow="À propos"
-              title="Une agence proche, disponible quand il faut avancer"
-              subtitle="Elan Marketing accompagne les entreprises et les porteurs de projet du Québec. Les rencontres peuvent se faire en personne, avec une équipe qui connaît votre dossier."
-            />
-            <Ancrage
-              ville={entreprise.adresse.ville}
-              rue={entreprise.adresse.rue}
-              className="mt-14"
-            />
-          </div>
-
-          <dl className="border-t border-line-strong">
-            {[
-              {
-                terme: "Adresse",
-                valeur: `${entreprise.adresse.rue}, ${entreprise.adresse.ville}`,
-              },
-              { terme: "Téléphone", valeur: entreprise.telephoneAffiche },
-              { terme: "Courriel", valeur: entreprise.courriel },
-            ].map((ligne) => (
-              <div
-                key={ligne.terme}
-                className="grid grid-cols-[8rem_1fr] items-baseline gap-4 border-b border-line py-5"
-              >
-                <dt className="text-[0.68rem] font-medium tracking-[0.2em] text-ink-muted uppercase">
-                  {ligne.terme}
-                </dt>
-                <dd className="text-[0.95rem] text-ink">{ligne.valeur}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <Link
-          href="/a-propos"
-          className="group mt-12 inline-flex items-center gap-2 text-sm font-semibold text-brand"
-        >
-          Notre histoire et nos valeurs
-          <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
-      </Section>
-
-      <Section id="equipe" grille className="section-emboitee-simple">
-        <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-20">
-          <div>
-            <SectionHeading
-              eyebrow="L'équipe Élan"
-              title={
-                <>
-                  Des personnes impliquées, pas une{" "}
-                  <em className="text-brand italic">boîte noire</em>
-                </>
-              }
-              subtitle="Derrière chaque recommandation, il y a une équipe qui écoute, clarifie et reste présente lorsque les décisions doivent devenir des actions."
-            />
-
-            <ul className="mt-12 border-t border-line-strong">
-              {[
-                ["Un regard partagé", "Les bonnes décisions se prennent avec les personnes qui vont les porter."],
-                ["Du concret", "Nous transformons les échanges en prochaines étapes claires et réalisables."],
-                ["Une présence continue", "Vous savez toujours qui avance sur votre dossier et pourquoi."],
-              ].map(([titre, texte]) => (
-                <li
-                  key={titre}
-                  className="grid grid-cols-[1.25rem_1fr] gap-4 border-b border-line py-5"
-                >
-                  <span aria-hidden="true" className="mt-2 size-1.5 rounded-full bg-accent" />
-                  <div>
-                    <h3 className="font-display text-[1.05rem] font-semibold text-ink">{titre}</h3>
-                    <p className="mt-1.5 text-[0.92rem] leading-[1.75] text-ink-muted">{texte}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <figure className="relative overflow-hidden rounded-[1.5rem] bg-surface-sunken shadow-[0_2rem_4rem_-2.6rem_rgba(5,23,14,0.72)]">
-            <div className="relative aspect-[4/5]">
-              <Image
-                src="/images/equipe-elan-exemple.png"
-                alt="Portrait illustratif de l'équipe Élan réunie autour d'une table de travail"
-                fill
-                sizes="(min-width: 64rem) 48vw, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="absolute right-4 bottom-4 left-4 rounded-full border border-white/20 bg-surface-invert/88 px-4 py-2 text-center text-[0.62rem] font-medium tracking-[0.16em] text-ink-invert-muted uppercase backdrop-blur-sm">
-              Photo illustrative · portraits de l&apos;équipe à venir
-            </figcaption>
-          </figure>
-        </div>
-      </Section>
-
-      <Faq questions={faqCommune} />
-
-      <div id="contact">
-        <FinalCta
-          titre="Vingt minutes pour savoir où ça bloque"
-          texte="Réservez un diagnostic. Nous regardons votre situation et nous vous disons ce qui aurait le plus d'effet dans les trois prochains mois."
-        />
-      </div>
       <section aria-hidden="true" className="finale-video-space relative min-h-[42svh]" />
       </div>
     </>

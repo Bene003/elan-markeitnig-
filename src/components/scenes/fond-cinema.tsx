@@ -4,34 +4,23 @@ import { useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * LE PLAN. Une structure de marbre blanc et de verre qui s'assemble en
- * lévitation sur le vert de la marque.
+ * LA SPHÈRE. Une composition en lévitation, posée comme un volume vivant
+ * derrière l'accueil.
  *
  * CE N'EST PAS UN FOND DÉCORATIF, C'EST LA PHRASE DE LA PAGE EN IMAGE. Le
- * titre dit que la croissance ne devrait pas dépendre du mois ; le plan montre
- * des blocs épars qui se rangent en un volume stable. La promesse et l'image
+ * titre dit que la croissance ne devrait pas dépendre du mois ; la sphère
+ * donne une présence continue et calme à ce premier écran. La promesse et l'image
  * disent la même chose, ce qui est la seule raison valable de mettre huit cent
  * kilo-octets de vidéo sur une page d'accueil.
  *
- * IL BOUCLE DÉJÀ. La dernière image du plan rejoint la première (on part en
- * gros plan, on s'éloigne sur le volume complet, on revient). Aucune coupure
- * n'est donc visible au raccord, et il n'y a pas besoin de jouer le plan en
- * aller-retour pour masquer un saut.
+ * LA LECTURE EST CONTINUE. L'élément vidéo est configuré avec `loop`, pour
+ * reprendre automatiquement à sa dernière image et rester en fond sans
+ * intervention.
  *
- * CE QU'IL A FALLU LUI FAIRE, à partir du master `Architectural.mp4` conservé
- * à la racine du dépôt (2,9 Mo, hors `public/`, donc jamais servi) :
- *   - RETIRER LA PISTE AUDIO. La vidéo est muette et le restera : l'audio
- *     était du poids mort intégral ;
- *   - RECOMPRESSER en H.264 CRF 27, ce qui la fait passer de 2,9 Mo à 865 ko
- *     sans dégradation visible sur une image aussi peu texturée ;
- *   - `+faststart`, qui remonte l'index en tête de fichier pour que la lecture
- *     démarre avant la fin du téléchargement.
- *
- * Le WebM a été essayé et écarté : 836 ko contre 865, soit vingt-neuf
- * kilo-octets, ce qui ne justifie pas un second fichier à réencoder et à
- * garder synchronisé à chaque retouche.
+ * Le fichier est placé dans `public/` afin d'être servi directement par
+ * Next.js à l'URL `/sphere-loop.mp4`.
  */
-const SOURCE_VIDEO: string | null = "/hero-elan.mp4";
+const SOURCE_VIDEO: string | null = "/sphere-loop.mp4";
 
 /**
  * FOND ANIMÉ DU HERO, CHARGÉ SUR TOUS LES ÉCRANS.

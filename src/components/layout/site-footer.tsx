@@ -24,7 +24,7 @@ export function SiteFooter() {
               {entreprise.nom}
             </div>
             <p className="mt-4 max-w-xs text-[0.92rem] leading-[1.8] text-ink-invert-muted">
-              Agence commerciale et de croissance, à Montréal.
+              Agence commerciale et de croissance.
             </p>
           </div>
 

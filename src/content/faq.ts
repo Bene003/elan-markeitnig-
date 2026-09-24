@@ -12,7 +12,7 @@ export const faqCommune: QuestionFaq[] = [
   {
     question: "Comment se passe le diagnostic de 20 minutes ?",
     reponse:
-      "Vous choisissez un créneau dans le calendrier, vous recevez une confirmation, et nous nous parlons en visioconférence ou en personne à Montréal. Vingt minutes, sans frais et sans suite obligatoire.",
+      "Vous choisissez un créneau dans le calendrier et vous répondez à un questionnaire sur votre situation. Nous le lisons avant l'appel, pour que les vingt minutes servent à creuser plutôt qu'à faire les présentations. Nous nous parlons ensuite en visioconférence, ou en personne quand c'est possible, sans frais et sans suite obligatoire.",
   },
   {
     question: "Est-ce que je peux vous écrire plutôt que réserver ?",
@@ -20,9 +20,9 @@ export const faqCommune: QuestionFaq[] = [
       "Oui. Le formulaire plus bas fonctionne tout aussi bien. Le rendez-vous est simplement le chemin le plus rapide si vous êtes prêt à avancer.",
   },
   {
-    question: "Travaillez-vous en dehors de Montréal ?",
+    question: "Faut-il être sur place pour travailler avec vous ?",
     reponse:
-      "Oui, partout au Québec, à distance. Montréal et ses environs sont simplement les endroits où nous pouvons aussi nous rencontrer en personne.",
+      "Non. Tout se fait très bien à distance, et c'est le cas de la majorité des accompagnements. Une rencontre en personne reste possible quand la distance le permet.",
   },
   {
     question: "Quels sont vos tarifs ?",
