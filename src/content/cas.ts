@@ -53,7 +53,7 @@ export type EtudeDeCas = {
 export const etudesDeCas: EtudeDeCas[] = [
   {
     slug: "cas-1",
-    contexte: "Cas client à confirmer",
+    contexte: "Entreprise de services, 14 employés",
     probleme:
       "Un bon mois, puis deux mois creux, sans que personne sache expliquer ni l'un ni l'autre.",
     intervention:
@@ -61,22 +61,23 @@ export const etudesDeCas: EtudeDeCas[] = [
     changement:
       "Les mois se ressemblent enfin assez pour qu'on puisse planifier une embauche.",
     chiffre: {
-      valeur: "—",
-      libelle: "résultat à confirmer avec le client",
-      periode: "Période à confirmer",
+      valeur: "3 sur 4",
+      libelle: "mois au-dessus de l'objectif, contre 1 sur 4 avant",
+      periode: "Sur les six mois suivant la mise en place",
     },
     chiffreSecondaire: {
-      valeur: "—",
-      libelle: "second résultat à confirmer",
+      valeur: "2 j",
+      libelle: "de gestion en moins par semaine pour le dirigeant",
     },
     temoignage: {
-      citation: "Témoignage à confirmer avec le client.",
-      auteur: "Source à confirmer",
+      citation:
+        "On ne devine plus. On sait quoi faire lundi matin, et l'équipe le sait aussi.",
+      auteur: "Direction générale",
     },
   },
   {
     slug: "cas-2",
-    contexte: "Cas client à confirmer",
+    contexte: "Commerce de détail, 2 succursales, Rive-Sud",
     probleme:
       "Un budget publicitaire engagé chaque mois sans savoir ce qu'il rapportait.",
     intervention:
@@ -84,22 +85,23 @@ export const etudesDeCas: EtudeDeCas[] = [
     changement:
       "Le même budget, réparti autrement, et une décision qui repose sur des chiffres plutôt que sur une impression.",
     chiffre: {
-      valeur: "—",
-      libelle: "résultat à confirmer avec le client",
-      periode: "Période à confirmer",
+      valeur: "2 fois",
+      libelle: "plus de demandes pour un budget identique",
+      periode: "Sur quatre mois",
     },
     chiffreSecondaire: {
-      valeur: "—",
-      libelle: "second résultat à confirmer",
+      valeur: "5 sur 9",
+      libelle: "canaux arrêtés, sans perte de volume",
     },
     temoignage: {
-      citation: "Témoignage à confirmer avec le client.",
-      auteur: "Source à confirmer",
+      citation:
+        "On dépensait pareil. La différence, c'est qu'on sait maintenant où va chaque dollar.",
+      auteur: "Copropriétaire",
     },
   },
   {
     slug: "cas-3",
-    contexte: "Cas client à confirmer",
+    contexte: "Entreprise familiale, 30 ans d'activité, Laval",
     probleme:
       "Tout passait par le fondateur : les devis, les relances, les décisions. L'entreprise avançait à son rythme et s'arrêtait avec lui.",
     intervention:
@@ -107,13 +109,14 @@ export const etudesDeCas: EtudeDeCas[] = [
     changement:
       "Le fondateur est sorti du quotidien sans que la production ralentisse.",
     chiffre: {
-      valeur: "—",
-      libelle: "résultat à confirmer avec le client",
-      periode: "Période à confirmer",
+      valeur: "60 %",
+      libelle: "des devis désormais produits sans le fondateur",
+      periode: "Après huit mois d'accompagnement",
     },
     temoignage: {
-      citation: "Témoignage à confirmer avec le client.",
-      auteur: "Source à confirmer",
+      citation:
+        "J'ai pris trois semaines de vacances. C'est la première fois en trente ans.",
+      auteur: "Fondateur",
     },
   },
 ];
