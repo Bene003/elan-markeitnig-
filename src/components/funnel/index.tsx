@@ -242,8 +242,18 @@ export function CaseStudies({ cas }: { cas: EtudeDeCas[] }) {
                 ) : null}
               </div>
 
+              {/* LA MENTION « EXEMPLE FICTIF » RESTE TANT QUE LES CAS NE SONT
+                  PAS RÉELS. Le site est en ligne sur une adresse publique
+                  pendant que le client compare les maquettes : les chiffres
+                  doivent y être, pour qu'on juge la page à sa vraie densité,
+                  mais rien ne doit se lire comme une performance affirmée.
+                  C'est le même traitement que la V3, qui marque déjà chacun
+                  de ses chiffres. Elle disparaît avec les vrais cas. */}
               <p className="mt-4 text-xs tracking-wide text-ink-muted">
                 {etude.chiffre.periode}
+                <span className="ml-2 text-ink-muted/70 italic">
+                  exemple fictif
+                </span>
               </p>
 
               {etude.temoignage ? (
